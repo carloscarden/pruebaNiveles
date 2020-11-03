@@ -1,5 +1,7 @@
 {
   "name": "pruebaNiveles",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

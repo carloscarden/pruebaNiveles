@@ -14,7 +14,7 @@ declare var Mercadopago;
 export class MercadopagoPage implements OnInit {
 
 
-  doSubmit = true;
+  doSubmit = false;
 
 
   preference = {
@@ -45,6 +45,7 @@ export class MercadopagoPage implements OnInit {
   guessPaymentMethod(event) {
     this.cleanCardInfo();
     const cardnumber = (document.getElementById('cardNumber') as HTMLInputElement).value;
+    console.log('cardnumber', cardnumber);
     if (cardnumber.length >= 6) {
       const bin = cardnumber.substring(0, 6);
       console.log(bin);
@@ -57,13 +58,17 @@ export class MercadopagoPage implements OnInit {
 
   setPaymentMethod(status, response) {
     if (status === 200) {
+      const that = this;
       const paymentMethod = response[0];
-
+      console.log('paymentMethod', paymentMethod);
       (document.getElementById('paymentMethodId') as HTMLInputElement).value = paymentMethod.id;
       document.getElementById('cardNumber').style.backgroundImage = 'url(' + paymentMethod.thumbnail + ')';
 
       if (paymentMethod.additional_info_needed.includes('issuer_id')) {
-        this.getIssuers(paymentMethod.id);
+        Mercadopago.getIssuers(
+          paymentMethod.id,
+          that.setIssuers
+        );
 
       } else {
         document.getElementById('issuerInput').classList.add('hidden');
@@ -74,13 +79,6 @@ export class MercadopagoPage implements OnInit {
     } else {
       alert(`payment method info error: ${response}`);
     }
-  }
-
-  getIssuers(paymentMethodId) {
-    Mercadopago.getIssuers(
-      paymentMethodId,
-      this.setIssuers
-    );
   }
 
   setIssuers(status, response) {

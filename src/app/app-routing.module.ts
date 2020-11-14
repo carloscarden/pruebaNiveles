@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'fotos',
     loadChildren: () => import('./pages/fotos/fotos.module').then( m => m.FotosPageModule)
   },
+  {
+    path: 'mercadopago',
+    loadChildren: () => import('./pages/mercadopago/mercadopago.module').then( m => m.MercadopagoPageModule)
+  },
 ];
 
 @NgModule({
